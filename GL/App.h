@@ -4,10 +4,13 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
+#include <camera.h>
 
 class App
 {
 public:
+	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	const unsigned int SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 	static App* app;
 
 	struct APPINFO
@@ -64,7 +67,7 @@ public:
 		glfwSetCursorPosCallback(window, glfw_onMouseMove);
 		glfwSetScrollCallback(window, glfw_onMouseWheel);
 
-		glfwSetInputMode(window, GLFW_CURSOR, info.flags.cursor? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(window, GLFW_CURSOR, info.flags.cursor? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 
 		// glad: load all OpenGL function pointers
 		// ---------------------------------------
@@ -78,6 +81,8 @@ public:
 		
 		do 
 		{
+			processInput();
+
 			render(static_cast<float>(glfwGetTime()));
 
 			glfwSwapBuffers(window);
@@ -101,12 +106,33 @@ public:
 		info.minorVersion = 3;
 		info.samples = 0;
 		info.flags.all = 0;
-		info.flags.cursor = 1;
+		info.flags.cursor = 0;
+
+		camera = Camera(glm::vec3(0.f, 0.f, 3.f));
 	}
 
 	virtual void start()
 	{
 
+	}
+
+	virtual void processInput()
+	{
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, true);
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			camera.ProcessKeyboard(FORWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			camera.ProcessKeyboard(BACKWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			camera.ProcessKeyboard(LEFT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
 
 	virtual void render(float time)
@@ -121,12 +147,30 @@ public:
 
 	virtual void onResize(int width, int height)
 	{
-
+		glViewport(0, 0, width, height);
 	}
 
 	virtual void onKey(int key, int action)
 	{
-
+// 		fprintf(stderr, "key %d, action %d", key, action);
+// 		if (GLFW_PRESS == action || GLFW_REPEAT == action)
+// 		{
+// 			switch (key)
+// 			{
+// 			case GLFW_KEY_ESCAPE:
+// 				glfwSetWindowShouldClose(window, true);
+// 			case GLFW_KEY_W:
+// 				camera.ProcessKeyboard(FORWARD, deltaTime);
+// 			case GLFW_KEY_S:
+// 				camera.ProcessKeyboard(BACKWARD, deltaTime);
+// 			case GLFW_KEY_A:
+// 				camera.ProcessKeyboard(LEFT, deltaTime);
+// 			case GLFW_KEY_D:
+// 				camera.ProcessKeyboard(RIGHT, deltaTime);
+// 			default:
+//				break;
+// 			}
+// 		}
 	}
 
 	virtual void onMouseButton(int button, int action)
@@ -136,12 +180,25 @@ public:
 
 	virtual void onMouseMove(int x, int y)
 	{
+		if (firstMouse)
+		{
+			lastX = x;
+			lastY = y;
+			firstMouse = false;
+		}
 
+		float xoffset = x - lastX;
+		float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
+
+		lastX = x;
+		lastY = y;
+
+		camera.ProcessMouseMovement(xoffset, yoffset);
 	}
 
 	virtual void onMouseWheel(int offset)
 	{
-
+		camera.ProcessMouseScroll(offset);
 	}
 
 	void getMousePosition(int& x, int& y)
@@ -157,10 +214,20 @@ public:
 	{
 		glfwSetWindowTitle(window, title);
 	}
+
 protected:
+
 	GLFWwindow* window;
 	APPINFO info; //待测试 同时输出输出联合体全部
+	
+	Camera camera;
+	float lastX = (float)SCR_WIDTH / 2.0;
+	float lastY = (float)SCR_HEIGHT / 2.0;
+	bool firstMouse = true;
 
+	// timing
+	float deltaTime = 0.0f;
+	float lastFrame = 0.0f;
 
 	static void glfw_onResize(GLFWwindow* window, int w, int h)
 	{

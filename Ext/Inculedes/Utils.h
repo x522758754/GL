@@ -3,6 +3,7 @@
 #define UTILS_H
 
 #include <glad/glad.h>
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <iostream>
 #include <vector>
@@ -13,7 +14,7 @@ public:
 	
 	// utility function for loading a 2D texture from file
 	// ---------------------------------------------------
-	static unsigned int loadTexture(char const * path, bool gmmaCorrection)
+	static unsigned int loadTexture(char const * path, bool gmmaCorrection = false)
 	{
 		unsigned int textureID;
 		glGenTextures(1, &textureID);
@@ -95,6 +96,11 @@ public:
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		return textureID;
+	}
+
+	static int Calc()
+	{
+		return 0;
 	}
 
 	//calculate fps

@@ -6,15 +6,17 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
-#include <glm/glm.hpp>
-
-
+//#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader
 {
 public:
 	unsigned int ID;
+	Shader()
+	{
+
+	}
 
 	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
 	{

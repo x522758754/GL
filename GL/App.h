@@ -88,11 +88,14 @@ public:
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 
+			running &= (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE);
+			running &= (glfwWindowShouldClose(window) != GL_TRUE);
+
 		} while (running);
 
 		shutdown();
 		
-		//glfwDestroyWindow(window);
+		glfwDestroyWindow(window);
 
 		glfwTerminate();
 	}

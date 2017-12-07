@@ -1,51 +1,53 @@
 #include "App.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <vector>
-#include <string>
+
+#include <iostream>
 
 #include <Utils.h>
 #include <shader.h>
 
 class PointShadowApp : public App
 {
-
-	
 	glm::vec3 lightPos = glm::vec3(0.f);
 	Shader shaderDepth, shaderBlinn;
-	unsigned int depthCubemap, depthMapFBO;
+	unsigned int depthCubemap, depthCubemap1;
+	unsigned int depthMapFBO;
 	unsigned int woodTexture;
-	float near_plane = 0.1f;
+	float near_plane = 1.f;
 	float far_plane = 25.f;
 
-	void start()
+	void start() override
 	{
 		//Texture
-		glGenTextures(1, &depthCubemap);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
-		for (int i=0; i != 6; ++i)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		}
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
 
 		//framebuffer
 		glGenFramebuffers(1, &depthMapFBO);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+
+		glGenTextures(1, &depthCubemap);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+		for (unsigned int i = 0; i < 6; ++i)
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubemap, 0);
+
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		//shaders
-		shaderDepth = Shader("shaders/depthMap.vs", "shaders/depthMap.fs");
+		shaderDepth = Shader("shaders/depthMap.vs", "shaders/depthMap.fs", "shaders/depthMap.gs");
 		shaderBlinn = Shader("shaders/blinn.vs", "shaders/blinn.fs");
 
 		//texture load
@@ -62,38 +64,44 @@ class PointShadowApp : public App
 
 	void render(float time)
 	{
+		lightPos.z = sin(glfwGetTime() * 0.5) * 3.0;
+
 		//render depthCubemap
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glm::mat4 projection = glm::perspective(glm::radians(90.f), (float)SHADOW_WIDTH / SHADOW_HEIGHT, near_plane, far_plane);
+		std::vector<glm::mat4> lightSpaceMat4s;
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.0, -1.0, 0.0)));
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(-1.f, 0.f, 0.f), glm::vec3(0.0, -1.0, 0.0)));
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.0, 0.0, 1.0)));
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.0, 0.0, -1.0)));
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(0.f, 0.f, 1.f), glm::vec3(0.0, -1.0, 0.0)));
+		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.0, -1.0, 0.0)));
+
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		glm::mat4 projection = glm::perspective(glm::radians(90.f), (float)SHADOW_WIDTH / SHADOW_HEIGHT, near_plane, far_plane);
-		std::vector<glm::mat4> lightSpaceMat4s;
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3( 1.f,  0.f,  0.f), glm::vec3(0.0, -1.0,  0.0)));
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3(-1.f,  0.f,  0.f), glm::vec3(0.0, -1.0,  0.0)));
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.f,  1.f,  0.f), glm::vec3(0.0,  0.0,  1.0)));
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.f, -1.f,  0.f), glm::vec3(0.0,  0.0, -1.0)));
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.f,  0.f,  1.f), glm::vec3(0.0, -1.0,  0.0)));
-		lightSpaceMat4s.push_back(projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.f,  0.f, -1.f), glm::vec3(0.0, -1.0,  0.0)));
 
 		shaderDepth.use();
-		shaderDepth.setVec3("lightPos", lightPos);
-		shaderDepth.setFloat("far_plane", far_plane);
-		for (int i=0; i != 6; ++i)
+		for (int i = 0; i != 6; ++i)
 		{
 			shaderDepth.setMat4("lightSpaceMat4s[" + std::to_string(i) + "]", lightSpaceMat4s[i]);
 		}
+		shaderDepth.setFloat("far_plane", far_plane);
+		shaderDepth.setVec3("lightPos", lightPos);
+
 		renderScene(shaderDepth);
 
 		//render scene
-		glViewport(0, 0, info.windowWidth, info.windowHeight);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderBlinn.use();
-		glm::mat4 view;
-		view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(45.f), (float)SCR_WIDTH / SCR_HEIGHT, near_plane, far_plane);
-		shaderBlinn.setMat4("view", view);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, near_plane, far_plane);
+		shaderBlinn.setMat4("view", camera.GetViewMatrix());
 		shaderBlinn.setMat4("projection", projection);
 		shaderBlinn.setFloat("far_plane", far_plane);
 		shaderBlinn.setVec3("lightPos", lightPos);
@@ -218,4 +226,4 @@ class PointShadowApp : public App
 	}
 };
 
-DECLARE_GL_APP(PointShadowApp)
+//DECLARE_GL_APP(PointShadowApp)

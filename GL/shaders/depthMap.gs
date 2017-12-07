@@ -13,7 +13,6 @@ void main()
 		gl_Layer = face;
 		for(int i=0; i < 3; ++i)
 		{
-			int j= face * 3 + i;
 			fragPos = gl_in[i].gl_Position;
 			gl_Position = lightSpaceMat4s[face] * fragPos;
 			EmitVertex();

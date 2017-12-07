@@ -27,17 +27,33 @@ void main()
 	float spec = pow(diffuse, 32);
 	//阴影,有阴影则只会计算环境光
 	vec3 fragToLight = fs_in.position - lightPos;
-	float closestDpeth = texture(depthCubemap, fragToLight).r;
-	float closestDist = closestDpeth * far_plane;
-	vec3 distLight2FragPos = lightPos - fs_in.position;
-	float currentDist = length(distLight2FragPos);
+
 	float bias = 0.05;
-	float shadow = currentDist - bias > closestDist ? 1.0: 0.0;
+	float shadow = 0;
+	float offset = 0.1;
+	float samples = 4;
+	for(float x = -offset; x < offset; x += offset / (samples * 0.5))
+	{
+		for(float y = -offset; y < offset; y += offset / (samples * 0.5))
+		{
+			for(float z = -offset; z < offset; z += offset / (samples * 0.5))
+			{
+				float closestDpeth = texture(depthCubemap, fragToLight + vec3(x,y,z)).r;
+				float closestDist = closestDpeth * far_plane;
+				float currentDist = length(lightPos - fs_in.position);
+				if(currentDist - bias > closestDist)
+					shadow += 1.0;
+			}
+		}
+	}
+	shadow /= float(pow(samples,3));
+
+
 	//shadow = 0.0;
 	//out
 	vec3 texColor = texture(tex2D, fs_in.texcoord).rgb;
 	vec3 lightColor = vec3(0.3);
 
 	fragColor = vec4(texColor * lightColor, 1.0) * ((1.0- shadow) * (diffuse + spec) + ambient);
-	fragColor = vec4(vec3(closestDpeth), 1.0);
+	//fragColor = vec4(vec3(pow(closestDpeth, 2.0)), 1.0);
 }

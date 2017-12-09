@@ -27,5 +27,16 @@
     <ClCompile Include="PointShadow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="NormalMapping.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NormalMapping.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PointShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

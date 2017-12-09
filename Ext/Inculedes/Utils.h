@@ -3,10 +3,11 @@
 #define UTILS_H
 
 #include <glad/glad.h>
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <iostream>
 #include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
 
 class Utils
 {

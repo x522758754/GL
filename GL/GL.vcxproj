@@ -118,8 +118,13 @@
   <ItemGroup>
     <ClCompile Include="..\Ext\Inculedes\glad.c" />
     <ClCompile Include="App.h" />
+    <ClCompile Include="NormalMapping.cpp" />
     <ClCompile Include="PointShadow.cpp" />
     <ClCompile Include="TestApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NormalMapping.h" />
+    <ClInclude Include="PointShadow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

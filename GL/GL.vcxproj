@@ -22,6 +22,7 @@
     <ProjectGuid>{BCD63BFD-E069-4FCB-910F-10575DE0364E}</ProjectGuid>
     <RootNamespace>GL</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>HD</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -118,13 +119,13 @@
   <ItemGroup>
     <ClCompile Include="..\Ext\Inculedes\glad.c" />
     <ClCompile Include="App.h" />
-    <ClCompile Include="NormalMapping.cpp" />
-    <ClCompile Include="PointShadow.cpp" />
-    <ClCompile Include="TestApp.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NormalMapping.h" />
     <ClInclude Include="PointShadow.h" />
+    <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

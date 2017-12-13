@@ -5,7 +5,6 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#define STB_IMAGE_IMPLEMENTATION
 
 #include "stb_image.h"
 #include "Mesh.h"
@@ -14,6 +13,11 @@ class Model
 {
 public:
 	std::vector<Mesh> meshs;
+
+	Model()
+	{
+
+	}
 
 	Model(char* path)
 	{
@@ -34,7 +38,7 @@ private:
 	void loadModel(std::string path)
 	{
 		Assimp::Importer impoter;
-		const aiScene* scene = impoter.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = impoter.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -113,6 +117,12 @@ private:
 
 			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
+			std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 		}
 
 		return Mesh(vertices, indices, textures);

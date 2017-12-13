@@ -18,16 +18,13 @@
     <ClCompile Include="App.h">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestApp.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\Ext\Inculedes\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PointShadow.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="NormalMapping.cpp">
+    <ClCompile Include="Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +33,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PointShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

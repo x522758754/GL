@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "stb_image.h"
+#include <Utils.h>
 #include "Mesh.h"
 
 class Model
@@ -38,7 +38,7 @@ private:
 	void loadModel(std::string path)
 	{
 		Assimp::Importer impoter;
-		const aiScene* scene = impoter.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		const aiScene* scene = impoter.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -96,6 +96,18 @@ private:
 			else
 				vertex.TexCoords = glm::vec2(0.f, 0.f);
 
+			// tangent
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+
+			// bitangent
+			vector.x = mesh->mBitangents[i].x;
+			vector.y = mesh->mBitangents[i].y;
+			vector.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = vector;
+
 			vertices.push_back(vertex);
 		}
 
@@ -148,7 +160,9 @@ private:
 			if (!skip)
 			{
 				Texture texture;
-				texture.id = TextureFromFile(str.C_Str(), directory);
+				std::string filename = std::string(str.C_Str());
+				filename = directory + '/' + filename;
+				texture.id = Utils::loadTexture(filename.c_str());
 				texture.type = typeName;
 				texture.path = str;
 				textures.push_back(texture);
@@ -157,45 +171,6 @@ private:
 		}
 
 		return textures;
-	}
-
-	unsigned int TextureFromFile(const char* path, const std::string directory)
-	{
-		std::string filename = std::string(path);
-		filename = directory + '/' + filename;
-
-		unsigned int textureID = 0;
-		glGenTextures(1, &textureID);
-
-		int width, height, nrComponents;
-		unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-		if (data)
-		{
-			GLenum format;
-			switch (nrComponents)
-			{
-			case 1:
-				format = GL_RED;
-			case 2:
-				format = GL_BLUE;
-			case 3:
-				format = GL_GREEN;
-			case 4:
-				format = GL_RGBA;
-			}
-			glBindTexture(GL_TEXTURE_2D, textureID);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			stbi_image_free(data);
-		}
-
-		return textureID;
 	}
 
 };

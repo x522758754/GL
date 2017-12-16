@@ -38,5 +38,8 @@
     <ClInclude Include="TestApp.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ParallaxMapping.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

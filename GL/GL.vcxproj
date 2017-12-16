@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NormalMapping.h" />
+    <ClInclude Include="ParallaxMapping.h" />
     <ClInclude Include="PointShadow.h" />
     <ClInclude Include="TestApp.h" />
   </ItemGroup>

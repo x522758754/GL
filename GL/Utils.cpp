@@ -15,17 +15,19 @@ unsigned int Utils::loadTexture(char const * path, bool gmmaCorrection/* = false
 	if (data)
 	{
 		GLenum internalFormat, dataFormat;
-		if (nrComponents == 1)
-			internalFormat = dataFormat = GL_RED;
-		else if (nrComponents == 3)
+		switch (nrComponents)
 		{
+		case 1:
+			internalFormat = dataFormat = GL_RED;
+			break;
+		case 3:
 			internalFormat = gmmaCorrection ? GL_SRGB : GL_RGB;
 			dataFormat = GL_RGB;
-		}
-		else if (nrComponents == 4)
-		{
+			break;
+		case 4:
 			internalFormat = gmmaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
 			dataFormat = GL_RGBA;
+			break;
 		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);

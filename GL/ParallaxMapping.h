@@ -1,20 +1,22 @@
 #pragma once
 
+#pragma once
+
 #include "App.h"
 
 #include <Utils.h>
 #include <shader.h>
 #include <Model.h>
 
-class NormalMapping : public App
+class ParallaxMapping : public App
 {
-	unsigned int diffuseTex, normalTex;
+	unsigned int diffuseTex, normalTex, heightTex;
 	Shader shader;
 	Model m;
 	glm::vec3 lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
-
+	const float height_scale = 0.01;
 	unsigned int quadVAO = 0, quadVBO;
-	
+
 	void renderQuad()
 	{
 		if (0 == quadVAO)
@@ -111,14 +113,16 @@ class NormalMapping : public App
 		m = Model("models/Cyborg/Cyborg.obj");
 
 		//texture load
-		diffuseTex = Utils::loadTexture("textures/brickwall.jpg");
-		normalTex = Utils::loadTexture("textures/brickwall_normal.jpg");
+		diffuseTex = Utils::loadTexture("textures/bricks2.jpg");
+		normalTex = Utils::loadTexture("textures/bricks2_normal.jpg");
+		heightTex = Utils::loadTexture("textures/bricks2_disp.jpg");
 
 		//shader
-		shader = Shader("shaders/normalMap.vs", "shaders/normalMap.fs");
+		shader = Shader("shaders/ParallaxMap.vs", "shaders/ParallaxMap.fs");
 		shader.use();
 		shader.setInt("texture_diffuse1", 0);
 		shader.setInt("texture_normal1", 1);
+		shader.setInt("texture_height1", 2);
 		//
 		glEnable(GL_DEPTH_TEST);
 	}
@@ -130,7 +134,6 @@ class NormalMapping : public App
 		shader.use();
 
 		glm::mat4 model, view, projection;
-		//model = glm::rotate(model, glm::radians((float)glfwGetTime() * -10.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // rotate the quad to show normal mapping from multiple directions
 		view = camera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.f);
 		shader.setMat4("model", model);
@@ -138,14 +141,15 @@ class NormalMapping : public App
 		shader.setMat4("projection", projection);
 		shader.setVec3("lightPos", lightPos);
 		shader.setVec3("viewPos", camera.Position);
+		shader.setFloat("height_scale", height_scale);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseTex);/////
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, normalTex);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, heightTex);
+
 		renderQuad();
-
-
-		m.Draw(shader);
 	}
 };

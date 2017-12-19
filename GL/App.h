@@ -102,7 +102,7 @@ public:
 
 	virtual void init()
 	{
-		strcpy_s(info.title, "OpenGL SuperBible Example");
+		strcpy_s(info.title, "C# Lua");
 		info.windowWidth = 800;
 		info.windowHeight = 600;
 		info.majorVersion = 3;

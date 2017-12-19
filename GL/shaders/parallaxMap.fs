@@ -18,7 +18,9 @@ out vec4 fragColor;
 vec2 ParallaxMapping(vec2 texcoord, vec3 viewDir)
 {
 	//
-	const float numLayers = 10.0;
+	const float minLayers = 8.0;
+	const float maxLayers = 32.0;
+	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
 	float layerDepth = 1.0 / numLayers;
 	//1根据坐标，2计算当前坐标应偏移的深度
 	vec2  currentTexCoords = texcoord;
@@ -38,10 +40,17 @@ vec2 ParallaxMapping(vec2 texcoord, vec3 viewDir)
 		// get depth of next layer
 		currentLayerDepth += layerDepth;
 	}
-	//ViewDir.xy代表视线在贴图上的投影方向
-	//vec2 offsetP = viewDir.xy / viewDir.z * ( height * height_scale);
 
-	return texcoord - offsetP;
+	// get texture coordinates before collision (reverse operations)
+	vec2 prevTexCoords = currentTexCoords + deltaTexcoord;
+	// get depth after and before collision for linear interpolation
+	float afterDepth  = currentDepthMapValue - currentLayerDepth;
+	float beforeDepth = texture(texture_height1, prevTexCoords).r - currentLayerDepth + layerDepth;
+	// interpolation of texture coordinates
+	float weight = afterDepth / (afterDepth - beforeDepth);
+	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+	return finalTexCoords;
 }
 
 void main()
@@ -53,10 +62,10 @@ void main()
 	vec3 color = texture(texture_diffuse1, texcoord).rgb;
 	vec3 normal = normalize(texture(texture_normal1, texcoord).rgb * 2.0 - 1.0); //法线解压
 
-	float ambient = 0.15;
+	float ambient = 0.1;
 	vec3 halfDir = normalize(fs_in.viewDir + fs_in.lightDir);
 	float diffuse = max(0.0, dot(fs_in.lightDir, normal));
-	float specular = pow(max(0.0, dot(halfDir, normal)), 8.0);
+	float specular = 0.2 * pow(max(0.0, dot(halfDir, normal)), 32.0);
 	color = (ambient + diffuse + specular) * color;
 	fragColor = vec4(color, 1.0);
 }

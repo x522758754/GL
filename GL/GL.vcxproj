@@ -123,6 +123,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HighDynamicRange.h" />
     <ClInclude Include="NormalMapping.h" />
     <ClInclude Include="ParallaxMapping.h" />
     <ClInclude Include="PointShadow.h" />

@@ -31,7 +31,7 @@ void main()
 	TBN = transpose(TBN);
 	vec3 fragPos = mat3(model) * aPos;
 	vec3 lightDir = lightPos - fragPos;
-	vec3 viewDir = lightPos - fragPos;
+	vec3 viewDir = viewPos - fragPos;
 	vs_out.texcoord = aTexcoord;
 	vs_out.fragPos = TBN * fragPos;
 	vs_out.lightDir = TBN * lightDir;

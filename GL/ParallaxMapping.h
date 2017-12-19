@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "App.h"
 
 #include <Utils.h>
@@ -14,7 +12,7 @@ class ParallaxMapping : public App
 	Shader shader;
 	Model m;
 	glm::vec3 lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
-	const float height_scale = 0.01;
+	const float height_scale = 0.1;
 	unsigned int quadVAO = 0, quadVBO;
 
 	void renderQuad()

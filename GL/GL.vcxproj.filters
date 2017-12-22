@@ -44,5 +44,8 @@
     <ClInclude Include="HighDynamicRange.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

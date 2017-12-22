@@ -10,7 +10,7 @@ class App
 {
 public:
 	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	const unsigned int SCR_WIDTH = 1280, SCR_HEIGHT = 720;
+	const unsigned int SCR_WIDTH = 1280 / 1.6, SCR_HEIGHT = 720 / 1.6;
 	static App* app;
 
 	struct APPINFO
@@ -103,8 +103,8 @@ public:
 	virtual void init()
 	{
 		strcpy_s(info.title, "C# Lua");
-		info.windowWidth = 800;
-		info.windowHeight = 600;
+		info.windowWidth = SCR_WIDTH;
+		info.windowHeight = SCR_HEIGHT;
 		info.majorVersion = 3;
 		info.minorVersion = 3;
 		info.samples = 0;

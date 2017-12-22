@@ -58,8 +58,8 @@ public:
 		const char* fsCode = fragmentCode.c_str();
 
 		unsigned int vertex, fragment, geometry;
-		createShader(&vertex, GL_VERTEX_SHADER, &vsCode);
-		createShader(&fragment, GL_FRAGMENT_SHADER, &fsCode);
+		createShader(&vertex, GL_VERTEX_SHADER, &vsCode, vertexPath);
+		createShader(&fragment, GL_FRAGMENT_SHADER, &fsCode, fragmentPath);
 
 		this->ID = glCreateProgram();
 		glAttachShader(ID, vertex);
@@ -80,7 +80,7 @@ public:
 			glGetProgramiv(this->ID, GL_INFO_LOG_LENGTH, &length);
 			infoLog = new char[length];
 			glGetProgramInfoLog(this->ID, length, NULL, infoLog);
-			std::cout << "Error; " << infoLog << std::endl;
+			std::cout << vertexPath <<  "\t&&\t" << fragmentPath  <<"\nError; " << infoLog << std::endl;
 		}
 
 		glDeleteShader(vertex);
@@ -130,7 +130,7 @@ public:
 
 private:
 
-	void createShader(unsigned int* shaderObj, unsigned int shaderType, const char* const* string) const
+	void createShader(unsigned int* shaderObj, unsigned int shaderType, const char* const* string, const char* path = "") const
 	{
 		*shaderObj = glCreateShader(shaderType);
 		glShaderSource(*shaderObj, 1, string, NULL);
@@ -144,7 +144,7 @@ private:
 			glGetShaderiv(*shaderObj, GL_INFO_LOG_LENGTH, &length);
 			infoLog = new char[length];
 			glGetShaderInfoLog(*shaderObj, length, NULL, infoLog);
-			std::cout << "Error: " << infoLog << std::endl;
+			std::cout << path <<"\nError: " << infoLog << std::endl;
 		}
 	}
 };

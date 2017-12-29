@@ -124,10 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="DeferredShading.h" />
     <ClInclude Include="HighDynamicRange.h" />
     <ClInclude Include="NormalMapping.h" />
     <ClInclude Include="ParallaxMapping.h" />
     <ClInclude Include="PointShadow.h" />
+    <ClInclude Include="SSAO.h" />
     <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -10,7 +10,7 @@ class App
 {
 public:
 	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	const unsigned int SCR_WIDTH = 1280 / 1.6, SCR_HEIGHT = 720 / 1.6;
+	const float SCR_WIDTH = 1280 / 1.6, SCR_HEIGHT = 720 / 1.6;
 	static App* app;
 
 	struct APPINFO
@@ -85,6 +85,8 @@ public:
 
 			render(static_cast<float>(glfwGetTime()));
 
+			render();
+
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 
@@ -102,7 +104,7 @@ public:
 
 	virtual void init()
 	{
-		strcpy_s(info.title, "C# Lua");
+		strcpy_s(info.title, "123");
 		info.windowWidth = SCR_WIDTH;
 		info.windowHeight = SCR_HEIGHT;
 		info.majorVersion = 3;
@@ -139,6 +141,11 @@ public:
 	}
 
 	virtual void render(float time)
+	{
+
+	}
+
+	virtual void render()
 	{
 
 	}

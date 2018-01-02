@@ -44,7 +44,7 @@ void main()
 		offset = projection * offset; //from view to clip-space
 		offset.xyz /= offset.w; //perspective divide
 		offset.xyz = offset.xyz * 0.5 + 0.5;
-		//get sample depth
+		//get sample depth,此时offset.xy已转到屏幕坐标空间
 		float sampleDepth = texture(texture_gPositionDepth, offset.xy).z; //get depth value of kernel sample
 		//range check & accumulate
 		float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth));

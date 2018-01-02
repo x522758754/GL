@@ -21,6 +21,9 @@ class SSAO : public App
 	std::default_random_engine generator;
 	std::vector<glm::vec3> ssaoKernel;
 	std::vector<glm::vec3> ssaoNoise;
+	//light info
+	glm::vec3 lightPos = glm::vec3(2.0, 4.0, -2.0);
+	glm::vec3 lightColor = glm::vec3(0.2, 0.2, 0.7);
 
 	float lerp(float a, float b, float f)
 	{
@@ -82,16 +85,22 @@ class SSAO : public App
 		shaderGeometry = Shader("shaders/ssaoGeometry.vs", "shaders/ssaoGeometry.fs");
 		shaderCalc = Shader("shaders/hdr.vs", "shaders/ssaoCalc.fs");
 		shaderBlur = Shader("shaders/hdr.vs", "shaders/ssaoBlur.fs");
-		shaderLight = Shader("shaders/hdr.vs", "shaders/deferredLight.fs");
+		shaderLight = Shader("shaders/hdr.vs", "shaders/ssaoLight.fs");
 
 		shaderCalc.use();
-		shaderCalc.setInt("texture_gPosition", 0);
+		shaderCalc.setInt("texture_gPositionDepth", 0);
 		shaderCalc.setInt("texture_gNormal", 1);
 		shaderCalc.setInt("texture_gAlbedoSpec", 2);
 		shaderCalc.setInt("texture_Noise", 3);
 
 		shaderBlur.use();
 		shaderBlur.setInt("texture_ssaoInput", 0);
+
+		shaderLight.use();
+		shaderLight.setInt("texture_gPositionDepth", 0);
+		shaderLight.setInt("texture_gNormal", 1);
+		shaderLight.setInt("texture_gAlbedo", 2);
+		shaderLight.setInt("texture_ssaoBlur", 3);
 
 		//models
 		m = Model("models/nanosuit/nanosuit.obj");
@@ -139,7 +148,6 @@ class SSAO : public App
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_blurBuffer, 0);
 
-
 		//opengl status
 		glEnable(GL_DEPTH_TEST);
 	}
@@ -184,6 +192,7 @@ class SSAO : public App
 
 		//3.blur ssao texture to remove noise
 		glBindFramebuffer(GL_FRAMEBUFFER, fboBlur);
+		glClear(GL_COLOR_BUFFER_BIT);
 		shaderBlur.use();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex_ssaoColorbuffer);
@@ -191,7 +200,25 @@ class SSAO : public App
 
 		//4. lighting pass
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderLight.use();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texs[0]);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texs[1]);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, texs[2]);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, tex_blurBuffer);
+		const float constant = 1.0; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+		const float linear = 0.09;
+		const float quadratic = 0.032;
+		shaderLight.setFloat("light.linear", linear);
+		shaderLight.setFloat("light.quadratic", quadratic);
+		glm::vec3 lightPosView = glm::vec3(camera.GetViewMatrix() * glm::vec4(lightPos, 1.0));
+		shaderLight.setVec3("light.position", lightPosView);
+		shaderLight.setVec3("light.color", lightColor);
+		renderQuad();
 	}
 
 	// -----------------------------------------

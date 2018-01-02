@@ -12,7 +12,9 @@ struct Light{
 	vec3 color;
 
 	float linear;
-}
+	float quadratic;
+};
+uniform Light light;
 
 void main()
 {
@@ -24,6 +26,15 @@ void main()
 	// calc blinn-phong in view space
 	vec3 viewPos = vec3(0.0); 
 	vec3 viewDir = viewPos - fragPos;
-	vec3 lightDir = light.position 
-	float diffuse = max(0, dot(normal, lightDir));
+	vec3 lightDir = light.position - fragPos;
+	float diffuse = max(0.0, dot(normal, normalize(lightDir)));
+	vec3 halfDir = normalize(lightDir + viewDir);
+	float specular = pow(max(0.0, dot(normal, halfDir)), 8.0);
+	float distance = length(lightDir);
+	float attenuation = 1 / (1.0 + light.linear * distance + light.quadratic * distance * distance);
+	vec3 lightColor = light.color * (specular + diffuse) * attenuation;
+	vec3 ambient = 0.3 * albedo * blur;
+	lightColor += ambient;
+
+	FragColor = vec4(lightColor, 1.0);
 }

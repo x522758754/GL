@@ -6,5 +6,6 @@
 #include "Bloom.h"
 #include "DeferredShading.h"
 #include "SSAO.h"
+#include "PBR.h"
 
-DECLARE_GL_APP(SSAO)
+DECLARE_GL_APP(PBR)

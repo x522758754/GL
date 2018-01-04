@@ -53,5 +53,8 @@
     <ClInclude Include="SSAO.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PBR.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

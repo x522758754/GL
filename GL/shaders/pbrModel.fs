@@ -9,17 +9,25 @@ in VS_OUT
 	vec2 texcoord;
 } fs_in;
 
-const int N_Light_SIZE = 4;
+const int N_LIGHT_SIZE = 4;
 const float PI = 3.14159265359;
 
-uniform vec3 cameraPos;
-uniform vec3 albedo;
-uniform float metallic;
-uniform float roughness;
-uniform float ao;
 
-uniform vec3 lightPositions[N_Light_SIZE];
-uniform vec3 lightColors[N_Light_SIZE];
+
+uniform vec3 lightPositions[N_LIGHT_SIZE];
+uniform vec3 lightColors[N_LIGHT_SIZE];
+
+uniform vec3 cameraPos;
+vec3 albedo;
+float metallic;
+float roughness;
+float ao;
+
+uniform sampler2D albedoMap;
+uniform sampler2D normalMap;
+uniform sampler2D metallicMap;
+uniform sampler2D roughnessMap;
+uniform sampler2D aoMap;
 
 //fresnel equation, calculate the ratio between surface reflects light(specular reflection) and refracts light(diffuse reflection)
 vec3 FresnelSchlick(float cosTheta, vec3 F0)
@@ -78,6 +86,13 @@ void main()
 	vec3 normal = normalize(fs_in.normal);
 	vec3 viewDir = normalize(cameraPos - fs_in.worldPos);
 
+	albedo = texture(albedoMap, fs_in.texcoord).rgb;
+	normal = texture(normalMap, fs_in.texcoord).rgb;
+	normal = (normal - 0.5) * 2;
+	metallic = texture(metallicMap, fs_in.texcoord).r;
+	roughness = texture(roughnessMap, fs_in.texcoord).r;
+	ao = texture(aoMap, fs_in.texcoord).r;
+
 	vec3 F0 = vec3(0.04); //大多数电介质表面使用0.04作为基础反射率足够好
 	//因为金属表面会吸收所有折射光线而没有漫反射，所以我们可以直接使用表面颜色纹理来作为它们的基础反射率
 	F0 = mix(F0, albedo, metallic);
@@ -85,7 +100,7 @@ void main()
 	//reflectance equation
 	//Lo(p,ωo)=∫Ω(kdc/π+ksDFG/4(ωo.n)(ωi.n))Li(p,ωi)n.ωidωi
 	vec3 Lo = vec3(0.0);//outgoing radiance
-	for(int i=0; i < N_Light_SIZE; ++i)
+	for(int i=0; i < N_LIGHT_SIZE; ++i)
 	{
 		vec3 lightDir = normalize(lightPositions[i] - fs_in.worldPos);
 		vec3 halfWayDir = normalize(lightDir + viewDir);
@@ -97,7 +112,7 @@ void main()
 
 		float cosTheta = max(0.0, dot(normal, viewDir)); //there n,v or h,v
 		vec3 F = FresnelSchlick(cosTheta, F0);
-		float D = DistributionGGX(normal, halfWayDir, roughtness);
+		float D = DistributionGGX(normal, halfWayDir, roughness);
 		float G = GeometrySmith(normal, viewDir, lightDir, roughness);
 		//Cook-Torrance BRDF: fr=kdflambert+ksfcook−torrance
 		vec3 numerator = D * F * G;

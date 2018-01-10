@@ -9,10 +9,8 @@ in VS_OUT
 	vec2 texcoord;
 } fs_in;
 
-const int N_LIGHT_SIZE = 4;
+const int N_LIGHT_SIZE = 1;
 const float PI = 3.14159265359;
-
-
 
 uniform vec3 lightPositions[N_LIGHT_SIZE];
 uniform vec3 lightColors[N_LIGHT_SIZE];
@@ -80,15 +78,37 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 	return ggx1 * ggx2;
 }
 
+//疑问
+// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
+// Don't worry if you don't get what's going on; you generally want to do normal 
+// mapping the usual way for performance anways; I do plan make a note of this 
+// technique somewhere later in the normal mapping tutorial.
+vec3 GetNormalFromMap()
+{
+	vec3 tangentNormal = texture(normalMap, fs_in.texcoord).rgb;
+	tangentNormal * 2.0 - 1.0;
+
+	vec3 Q1 = dFdx(fs_in.worldPos);
+	vec3 Q2 = dFdy(fs_in.worldPos);
+	vec2 st1 = dFdx(fs_in.texcoord);
+	vec2 st2 = dFdy(fs_in.texcoord);
+
+	vec3 N = normalize(fs_in.normal);
+	vec3 T = normalize(Q1 * st2.t - Q2 * st1.t);
+	vec3 B = -normalize(cross(N,T));
+	mat3 TBN = mat3(T, B, N);
+
+	return normalize(TBN * tangentNormal);
+}
+
 
 void main()
 {
 	vec3 normal = normalize(fs_in.normal);
 	vec3 viewDir = normalize(cameraPos - fs_in.worldPos);
 
-	albedo = texture(albedoMap, fs_in.texcoord).rgb;
-	normal = texture(normalMap, fs_in.texcoord).rgb;
-	normal = (normal - 0.5) * 2;
+	albedo = pow(texture(albedoMap, fs_in.texcoord).rgb, vec3(2.2));
+	normal = GetNormalFromMap();
 	metallic = texture(metallicMap, fs_in.texcoord).r;
 	roughness = texture(roughnessMap, fs_in.texcoord).r;
 	ao = texture(aoMap, fs_in.texcoord).r;
@@ -110,7 +130,7 @@ void main()
 		vec3 radiance = lightColors[i] * attenuation;
 		//calc term D(NDF) 
 
-		float cosTheta = max(0.0, dot(normal, viewDir)); //there n,v or h,v
+		float cosTheta = max(0.0, dot(halfWayDir, viewDir)); //there n,v or h,v
 		vec3 F = FresnelSchlick(cosTheta, F0);
 		float D = DistributionGGX(normal, halfWayDir, roughness);
 		float G = GeometrySmith(normal, viewDir, lightDir, roughness);
@@ -120,7 +140,7 @@ void main()
 		//prevent a divide by zero
 		vec3 specular = numerator / max(0.001, denominator);
 		vec3 Ks = F; //入射光线中被反射的比率
-		vec3 Kd = vec3(1.0) - Ks; //入射光线中被折射的比率
+		vec3 Kd = vec3(1.0) - Ks; //根据能量守恒,入射光线中被折射的比率
 		//对于金属表面，所有的折射光都会被直接吸收而不会散开
 		Kd *= 1.0 - metallic;
 		// add to outgoing radiance Lo

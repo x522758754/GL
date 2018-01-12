@@ -8,6 +8,7 @@ class IBL_Diffuse :public App
 {
 	const int N_LIGHT_SIZE = 4;
 	const int nrRows = 7, nrColumns = 7;
+	const int envCubemapSize = 512, irradianceMapSize = 32;
 	Shader shaderPBR, shaderMap, shaderSkybox, shaderIrradiance;
 	std::vector<glm::vec3> lightPositions, lightColors;
 	glm::vec3 albedo = glm::vec3(0.5f, 0.0f, 0.0f);
@@ -23,7 +24,7 @@ class IBL_Diffuse :public App
 	void start()
 	{
 		//shader
-		shaderPBR = Shader("shaders/pbrModel.vs", "shaders/pbrModel.fs");
+		shaderPBR = Shader("shaders/pbrModel.vs", "shaders/pbrModel_IBL_Diffuse.fs");
 		shaderMap = Shader("shaders/equirectangular2CubeMap.vs", "shaders/equirectangular2CubeMap.fs");
 		shaderSkybox = Shader("shaders/skybox.vs", "shaders/skybox.fs");
 		shaderIrradiance = Shader("shaders/cubemapConvolute.vs", "shaders/cubemapConvolute.fs");
@@ -69,13 +70,13 @@ class IBL_Diffuse :public App
 		glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 		glGenRenderbuffers(1, &captureRBO);
 		glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, envCubemapSize, envCubemapSize);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
 		glGenTextures(1, &envCubemap);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 		for (int i=0; i != 6; ++i)
 		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, NULL);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, envCubemapSize, envCubemapSize, 0, GL_RGB, GL_FLOAT, NULL);
 		}
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -96,7 +97,7 @@ class IBL_Diffuse :public App
 		captureViews.push_back(glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 
 		//convert hdr equirectangular environment to cubemap equivalent
-		glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
+		glViewport(0, 0, envCubemapSize, envCubemapSize); // don't forget to configure the viewport to the capture dimensions.
 		glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 		shaderMap.use();
 		shaderMap.setMat4("projection", captureProjection);
@@ -115,17 +116,18 @@ class IBL_Diffuse :public App
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+		glViewport(0, 0, irradianceMapSize, irradianceMapSize); // don't forget to configure the viewport to the capture dimensions.
 		glGenFramebuffers(1, &irradianceFBO);
 		glBindFramebuffer(GL_FRAMEBUFFER, irradianceFBO);
 		glGenRenderbuffers(1, &irradianceRBO);
 		glBindRenderbuffer(GL_RENDERBUFFER, irradianceRBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, irradianceMapSize, irradianceMapSize);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, irradianceRBO);
 		glGenTextures(1, &irradianceMap);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
 		for (int i=0; i != 6; ++i)
 		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, NULL);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, irradianceMapSize, irradianceMapSize, 0, GL_RGB, GL_FLOAT, NULL);
 		}
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

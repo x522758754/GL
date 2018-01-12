@@ -126,6 +126,7 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="DeferredShading.h" />
     <ClInclude Include="HighDynamicRange.h" />
+    <ClInclude Include="IBL_Diffuse.h" />
     <ClInclude Include="NormalMapping.h" />
     <ClInclude Include="ParallaxMapping.h" />
     <ClInclude Include="PBR.h" />

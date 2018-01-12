@@ -13,6 +13,7 @@ public:
 
 	static unsigned int loadTexture(char const * path, bool gmmaCorrection = false);
 	static unsigned int loadCubemap(std::vector<std::string> faces);
+	static unsigned int loadHDRImgae(char const * path);
 	static int Calc();
 	static char* CalculateFrameRate();
 

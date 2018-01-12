@@ -7,5 +7,6 @@
 #include "DeferredShading.h"
 #include "SSAO.h"
 #include "PBR.h"
+#include "IBL_Diffuse.h"
 
-DECLARE_GL_APP(PBR)
+DECLARE_GL_APP(IBL_Diffuse)

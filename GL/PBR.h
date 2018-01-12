@@ -1,4 +1,4 @@
-//
+//疑问，tbn矩阵的构造、球体的参数方程、球体的构造
 #pragma once
 #include "App.h"
 #include <Utils.h>
@@ -6,7 +6,7 @@
 
 class PBR :public App
 {
-	const int N_LIGHT_SIZE = 1;
+	const int N_LIGHT_SIZE = 4;
 	const int nrRows = 7, nrColumns = 7;
 	Shader shaderPBR;
 	std::vector<glm::vec3> lightPositions, lightColors;
@@ -23,14 +23,14 @@ class PBR :public App
 		
 		//light
 		lightPositions.push_back(glm::vec3(0.0f, 0.0f, 10.0f));
-// 		lightPositions.push_back(glm::vec3(-10.0f, 10.0f, 10.0f));
-// 		lightPositions.push_back(glm::vec3(10.0f, 10.0f, 10.0f));
-// 		lightPositions.push_back(glm::vec3(-10.0f, -10.0f, 10.0f));
-// 		lightPositions.push_back(glm::vec3(-10.0f, -10.0f, 10.0f));
+		lightPositions.push_back(glm::vec3(-10.0f, 10.0f, 10.0f));
+		lightPositions.push_back(glm::vec3(10.0f, 10.0f, 10.0f));
+		lightPositions.push_back(glm::vec3(-10.0f, -10.0f, 10.0f));
+		lightPositions.push_back(glm::vec3(-10.0f, -10.0f, 10.0f));
 		lightColors.push_back(glm::vec3(150.0f, 150.0f, 150.0f));
-// 		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
-// 		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
-// 		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
+		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
+		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
+		lightColors.push_back(glm::vec3(300.0f, 300.0f, 300.0f));
 
 		//texture 
 		albedoMap = Utils::loadTexture("textures/RustedIron/rustediron2_basecolor.png");

@@ -56,5 +56,8 @@
     <ClInclude Include="PBR.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="IBL_Diffuse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

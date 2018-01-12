@@ -87,6 +87,7 @@ public:
 
 			render();
 
+			// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 
@@ -99,6 +100,9 @@ public:
 		
 		glfwDestroyWindow(window);
 
+
+		// glfw: terminate, clearing all previously allocated GLFW resources.
+		// ------------------------------------------------------------------
 		glfwTerminate();
 	}
 

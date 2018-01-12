@@ -16,10 +16,10 @@ uniform vec3 lightPositions[N_LIGHT_SIZE];
 uniform vec3 lightColors[N_LIGHT_SIZE];
 
 uniform vec3 cameraPos;
-vec3 albedo;
-float metallic;
-float roughness;
-float ao;
+uniform vec3 albedo;
+uniform float metallic;
+uniform float roughness;
+uniform float ao;
 
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
@@ -106,12 +106,14 @@ void main()
 {
 	vec3 normal = normalize(fs_in.normal);
 	vec3 viewDir = normalize(cameraPos - fs_in.worldPos);
+	//albedo = pow(albedo, vec3(2.2));
 
-	albedo = pow(texture(albedoMap, fs_in.texcoord).rgb, vec3(2.2));
-	normal = GetNormalFromMap();
-	metallic = texture(metallicMap, fs_in.texcoord).r;
-	roughness = texture(roughnessMap, fs_in.texcoord).r;
-	ao = texture(aoMap, fs_in.texcoord).r;
+	// texture pbr
+	// albedo = pow(texture(albedoMap, fs_in.texcoord).rgb, vec3(2.2));
+	// normal = GetNormalFromMap();
+	// metallic = texture(metallicMap, fs_in.texcoord).r;
+	// roughness = texture(roughnessMap, fs_in.texcoord).r;
+	// ao = texture(aoMap, fs_in.texcoord).r;
 
 	vec3 F0 = vec3(0.04); //大多数电介质表面使用0.04作为基础反射率足够好
 	//因为金属表面会吸收所有折射光线而没有漫反射，所以我们可以直接使用表面颜色纹理来作为它们的基础反射率
@@ -119,7 +121,7 @@ void main()
 
 	//reflectance equation
 	//Lo(p,ωo)=∫Ω(kdc/π+ksDFG/4(ωo.n)(ωi.n))Li(p,ωi)n.ωidωi
-	vec3 Lo = vec3(0.0);//outgoing radiance
+	vec3 Lo = vec3(0.0);//outgoing radiance -- 物体表面的辐射(折射+反射) 
 	for(int i=0; i < N_LIGHT_SIZE; ++i)
 	{
 		vec3 lightDir = normalize(lightPositions[i] - fs_in.worldPos);
@@ -127,7 +129,7 @@ void main()
 
 		float distance = length(lightPositions[i] - fs_in.worldPos);
 		float attenuation = 1.0 / (distance * distance);
-		vec3 radiance = lightColors[i] * attenuation;
+		vec3 radiance = lightColors[i] * attenuation; //
 		//calc term D(NDF) 
 
 		float cosTheta = max(0.0, dot(halfWayDir, viewDir)); //there n,v or h,v

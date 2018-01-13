@@ -47,4 +47,6 @@ void main()
 	}
 	//PI 不明确
 	irradiance = PI * irradiance * (1.0 / nrSamples);
+	//irradiance = irradiance * (1.0 / nrSamples);
+	FragColor = vec4(irradiance, 1.0);
 }

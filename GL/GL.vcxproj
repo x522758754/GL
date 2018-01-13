@@ -119,6 +119,7 @@
   <ItemGroup>
     <ClCompile Include="..\Ext\Inculedes\glad.c" />
     <ClCompile Include="App.h" />
+    <ClCompile Include="IBL_Diffuse.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>

@@ -9,7 +9,7 @@ in VS_OUT
 	vec2 texcoord;
 } fs_in;
 
-const int N_LIGHT_SIZE = 1;
+const int N_LIGHT_SIZE = 4;
 const float PI = 3.14159265359;
 
 uniform vec3 lightPositions[N_LIGHT_SIZE];
@@ -156,7 +156,13 @@ void main()
 		float NdotL = max(dot(normal, lightDir), 0.0);
 		Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
 	}
-	vec3 ambient = irradiance * albedo * ao;
+	// ambient lighting (we now use IBL as the ambient term)
+	//vec3 ambient = vec3(0.002);
+	vec3 Ks = FresnelSchlick(max(0, dot(normal, viewDir)), F0, roughness);
+	vec3 Kd = 1.0 - Ks;
+	Kd *= 1.0 - metallic;
+	vec3 ambient = Kd * irradiance * albedo * ao;
+
 	vec3 color = ambient + Lo;
 	//hdr rendering
 	color = color / (color + vec3(1.0));

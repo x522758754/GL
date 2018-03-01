@@ -119,13 +119,13 @@
   <ItemGroup>
     <ClCompile Include="..\Ext\Inculedes\glad.c" />
     <ClCompile Include="App.h" />
-    <ClCompile Include="IBL_Diffuse.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="DeferredShading.h" />
+    <ClInclude Include="GrassWave.h" />
     <ClInclude Include="HighDynamicRange.h" />
     <ClInclude Include="IBL_Diffuse.h" />
     <ClInclude Include="NormalMapping.h" />

@@ -116,7 +116,7 @@ public:
 		info.minorVersion = 3;
 		info.samples = 0;
 		info.flags.all = 0;
-		info.flags.cursor = 0;
+		info.flags.cursor = 1;
 
 		camera = Camera(glm::vec3(0.f, 0.f, 3.f));
 	}

@@ -8,5 +8,6 @@
 #include "SSAO.h"
 #include "PBR.h"
 #include "IBL_Diffuse.h"
+#include "GrassWave.h"
 
-DECLARE_GL_APP(IBL_Diffuse)
+DECLARE_GL_APP(GrassWave)

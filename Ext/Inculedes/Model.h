@@ -75,7 +75,6 @@ private:
 		{
 			Vertex vertex;
 			glm::vec3 vector;
-
 			vector.x = mesh->mVertices[i].x;
 			vector.y = mesh->mVertices[i].y;
 			vector.z = mesh->mVertices[i].z;
@@ -107,6 +106,15 @@ private:
 			vector.y = mesh->mBitangents[i].y;
 			vector.z = mesh->mBitangents[i].z;
 			vertex.Bitangent = vector;
+
+			// color
+			if (mesh->mColors[0])
+			{
+				vector.r = mesh->mColors[0]->r;
+				vector.g = mesh->mColors[0]->g;
+				vector.b = mesh->mColors[0]->b;
+				vertex.Color = vector;
+			}
 
 			vertices.push_back(vertex);
 		}

@@ -27,9 +27,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="IBL_Diffuse.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NormalMapping.h">
@@ -60,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IBL_Diffuse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GrassWave.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

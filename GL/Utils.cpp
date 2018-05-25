@@ -31,6 +31,9 @@ unsigned int Utils::loadTexture(char const * path, bool gmmaCorrection/* = false
 		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
+		///第二个参数为纹理指定Mipmap的级别
+		///第三个参数告诉OpenGL希望把纹理储存为何种格式
+		///第七个参数定义了原图的格式和数据类型
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 

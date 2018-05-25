@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
-#include <camera.h>
+#include "camera.h"
 
 class App
 {

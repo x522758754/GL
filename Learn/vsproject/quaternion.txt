@@ -1,0 +1,36 @@
+
+i^2=j^2=k^2=ijk=-1
+ij=k,jk=i,ki=j
+
+对于单位的向量x(1,0,0),y(0,1,0),z(0,0,1)
+x × y = z， y × z = x，z × x = y 
+ixj=k, jxk=i, kxi=j; i,j,k的关系类似单位向量xyz
+
+四元数作为 有序对 q = [s, v], s∈R, v∈R³; 实部s(标量)：虚部v(向量): v =xi + yj + zk x,y,z∈R 或 q = s + x i + y j + z k
+
+Real Quaternion: q = [s, 0]
+
+Pure Quaternion: q = [0, v]
+
+Unit Quaternion: q = [0, v], |v|=1
+
+Quaternion Conjugate: q* = [s, -v] => qq* = [s² + |v|², 0] = s² + |v|²
+
+Quaternion Norm: |q| = (qq*)^(1/2) = (s² + |v|²)^(1/2)  --模
+
+Quaternion Normalization: q' = q / |q| = s / |q| + x / |q|i + y / |q|j + z / |q|k
+
+Quaternion Inverse: qq−1=[1,0]=1，注：1代表实部s，0代表虚部v
+=>		q−1 = q* / |q|²
+推导： 	q*qq-1 = q*; 
+		q* = sqrt(s² + v²)
+注：当|q| = 1(即q的模为1时)，q-1 = q*
+
+Quaternion Product: q1 = [s1, x1i+y1j+z1k] = [s1, v1], q2 = [s2, x2i+y2j+z2k] = [s2, v2]; 注：v1，v2为虚部,用向量表示
+=> 	q1q2 = [s1s2-v1.v2,s1v2+s2v1+v1xv2] 注：v1xv2为向量叉乘
+
+
+Quaternion Dot Product: q1 = [s1, x1i+y1j+z1k], q2 = [s2, x2i+y2j+z2k];
+=> 	q1.q2 = s1s2 + x1x2 + y1y2 + z1z2
+	cosθ = q1.q2 / |q1||q2|
+注：当|q1|,|q2| = 1(即q的模为1时)cosθ = q1.q2 

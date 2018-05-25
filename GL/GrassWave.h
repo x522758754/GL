@@ -1,3 +1,6 @@
+/*
+	面片草 模拟风吹 以及 人走动时 草动
+*/
 #pragma once
 #include "App.h"
 #include <Utils.h>
@@ -81,7 +84,7 @@ class GrassWave :public App
 		shaderGrass.setInt("texture_diffuse1", 0);
 
 		//models
-		//m = Model("models/Grass/grass_02.3DS");
+		m = Model("models/Grass/unityexport.obj");
 
 		//opengl status
 		glEnable(GL_DEPTH_TEST);
@@ -93,7 +96,7 @@ class GrassWave :public App
 		glClearColor(0.1, 0.3, 0.1, 1);
 
 		glm::mat4 model, view, projection;
-		//model = glm::scale(model, glm::vec3(0.002f));
+		//model = glm::scale(model, glm::vec3(200.f));
 		view = camera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.f);
 
@@ -105,7 +108,7 @@ class GrassWave :public App
 		shaderGrass.setFloat("time", time);
 		shaderGrass.setVec3("dstPos", glm::vec3(1.0));
 
-		//m.Draw(shaderGrass);
+		m.Draw(shaderGrass);
 		renderQuad();
 	}
 };

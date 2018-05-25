@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00_01_hello_window">
+      <UniqueIdentifier>{3fb07ff1-5c19-4378-b1df-32f4545d823d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_common">
+      <UniqueIdentifier>{899e9ab2-b1b8-4529-b4fb-1b0c02e91a9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_02_hello_triangle">
+      <UniqueIdentifier>{6b3f57e6-94ce-452c-ab53-e33862ea3ba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_04_textures">
+      <UniqueIdentifier>{355fab3b-64d0-4dec-90f8-d0ca9a7337af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_05_transform">
+      <UniqueIdentifier>{31f645d5-a592-4c35-ba29-ef45a037964e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_06_coordinate">
+      <UniqueIdentifier>{fe39cf57-5822-46d2-9f82-dc755a8382e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_07_camera">
+      <UniqueIdentifier>{f6d1d20f-da62-4736-9436-565dd346f96b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_01_colors">
+      <UniqueIdentifier>{5bce8e25-f12b-4b41-87e8-a95c7a3c0f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_02_baseLighting">
+      <UniqueIdentifier>{d303b3e6-4f9a-485a-865d-abb321a30e0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_03_materials">
+      <UniqueIdentifier>{ba303c8b-750d-4a69-9386-1922a34c5d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_04_lightMaps">
+      <UniqueIdentifier>{ac975415-5382-45a9-a529-878ae76fc3a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_05_lightCasters">
+      <UniqueIdentifier>{9b6bcf29-85da-450c-8d06-90f77979fe99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_06_multipleLights">
+      <UniqueIdentifier>{2e2405a6-43d8-40dc-a61e-72ac7c9eba42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_01_assimp">
+      <UniqueIdentifier>{99045199-8ab8-4bbf-9c2a-565f6cd11673}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\00_common\app.h">
+      <Filter>00_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_common\camera.h">
+      <Filter>00_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_common\gmath.h">
+      <Filter>00_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_02_hello_triangle\helloTriangle.hpp">
+      <Filter>00_02_hello_triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_04_textures\textures.hpp">
+      <Filter>00_04_textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_05_transform\transform.hpp">
+      <Filter>00_05_transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_06_coordinate\coordinate.hpp">
+      <Filter>00_06_coordinate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\00_07_camera\view.hpp">
+      <Filter>00_07_camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_01_colors\colors.hpp">
+      <Filter>01_01_colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_02_baseLighting\baseLighting.hpp">
+      <Filter>01_02_baseLighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_03_materials\materials.hpp">
+      <Filter>01_03_materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_04_lightMaps\lightMaps.hpp">
+      <Filter>01_04_lightMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_05_lightCasters\lightCasters.hpp">
+      <Filter>01_05_lightCasters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\01_06_multipleLights\multipleLights.hpp">
+      <Filter>01_06_multipleLights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02_01_assimp\assimp.hpp">
+      <Filter>02_01_assimp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Ext\Inculedes\glad.c">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\00_common\main.cpp">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\00_common\app.cpp">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Ext\Inculedes\Utils.cpp">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\00_common\camera.cpp">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\00_common\gmath.cpp">
+      <Filter>00_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\00_01_hello_window\hellowindow.cpp">
+      <Filter>00_01_hello_window</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

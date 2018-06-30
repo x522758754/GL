@@ -19,7 +19,7 @@
 class baseLighting : public app
 {
 	unsigned int texture, texture1;
-	unsigned int VAO;
+	unsigned int VAO, planeVAO;
 	Shader shader, lightShader;
 
 	void start()

@@ -52,6 +52,7 @@ void app::run()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, cfg.majorVersion);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, cfg.minorVersion);
 	glfwWindowHint(GLFW_SAMPLES, cfg.samples);
+
 	window = glfwCreateWindow(cfg.scrWidth, cfg.scrHeight, cfg.title, NULL, NULL);
 	if (!window)
 	{
@@ -76,6 +77,7 @@ void app::run()
 
 	start();
 
+
 	do 
 	{
 		deltaTime = glfwGetTime() - lastFrameTime;
@@ -92,6 +94,10 @@ void app::run()
 			break;
 
 	} while (running);
+
+	shutdown();
+
+	glfwTerminate();
 }
 
 void app::render(double time)

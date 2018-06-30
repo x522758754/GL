@@ -43,6 +43,52 @@
     <Filter Include="02_01_assimp">
       <UniqueIdentifier>{99045199-8ab8-4bbf-9c2a-565f6cd11673}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03_01_depthTesting">
+      <UniqueIdentifier>{5b602480-50ac-4d04-9557-e4d6eb78e4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_02_stencilTesting">
+      <UniqueIdentifier>{e33ca497-fe66-4f73-8fb7-8b8629d554ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_03_blending">
+      <UniqueIdentifier>{f8b0afd2-9cd9-488b-b27e-ae3357b059bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_04_faceCulling">
+      <UniqueIdentifier>{bbd416cb-623a-4ba0-8649-80c5198d575b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_05_framebuffers">
+      <UniqueIdentifier>{6b2dbed9-adbf-43c7-bc59-7b9fb3fff260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_06_cubemaps">
+      <UniqueIdentifier>{80ac60f5-97a2-4468-b4b7-726186f082a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_07_advancedData">
+      <UniqueIdentifier>{29bb9fd3-9ae5-4d4c-a3f2-cdb0c6251724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_09_geometryShader">
+      <UniqueIdentifier>{9dfe4d17-cb41-4143-9284-08495c79faf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_10_instanceing">
+      <UniqueIdentifier>{ea1195a1-73d9-45c6-ba6e-3c5d3602e350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_11_antiAliasing">
+      <UniqueIdentifier>{51af5b85-a4ed-4af8-8075-d253013bb09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_01_advancedLighting">
+      <UniqueIdentifier>{01f016b2-64ab-4d86-bad3-eb821b01c95e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_02_gammaCorrection">
+      <UniqueIdentifier>{48bd0b0a-6782-45c3-a034-19b923c36e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_03_shadowMapping">
+      <UniqueIdentifier>{bc3abd94-6b0a-457a-80e8-014aa7224685}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="04_04_normalMapping">
+      <UniqueIdentifier>{a4fe3109-d672-4dfb-aa5b-7ce0a834b6f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_05_parallaxMapping">
+      <UniqueIdentifier>{574b90fc-d4ab-48c0-8468-8d8b5033f0c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\00_common\app.h">
@@ -90,6 +136,75 @@
     <ClInclude Include="..\02_01_assimp\assimp.hpp">
       <Filter>02_01_assimp</Filter>
     </ClInclude>
+    <ClInclude Include="..\03_01_depthTesting\depthTesting.hpp">
+      <Filter>03_01_depthTesting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_02_stencilTesting\stencilTesting.hpp">
+      <Filter>03_02_stencilTesting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_03_blending\blending.hpp">
+      <Filter>03_03_blending</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_04_faceCulling\faceCulling.hpp">
+      <Filter>03_04_faceCulling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_05_framebuffers\framebuffers.hpp">
+      <Filter>03_05_framebuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_06_cubemaps\cubemaps.hpp">
+      <Filter>03_06_cubemaps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_06_cubemaps\environmentMapping.hpp">
+      <Filter>03_06_cubemaps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_07_advancedData\advancedData.hpp">
+      <Filter>03_07_advancedData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_09_geometryShader\geometryShader.hpp">
+      <Filter>03_09_geometryShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_09_geometryShader\explode.hpp">
+      <Filter>03_09_geometryShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_09_geometryShader\normalVisual.hpp">
+      <Filter>03_09_geometryShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_10_instanceing\instancing.hpp">
+      <Filter>03_10_instanceing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_10_instanceing\instancingPlus.hpp">
+      <Filter>03_10_instanceing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_10_instanceing\planet.hpp">
+      <Filter>03_10_instanceing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\03_11_antiAliasing\antiAliasing.hpp">
+      <Filter>03_11_antiAliasing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_01_advancedLighting\advancedLighting.hpp">
+      <Filter>04_01_advancedLighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_02_gammaCorrection\gammaCorrection.hpp">
+      <Filter>04_02_gammaCorrection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_03_shadowMapping\shadowMapping.hpp">
+      <Filter>04_03_shadowMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_03_shadowMapping\shadow.hpp">
+      <Filter>04_03_shadowMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_03_shadowMapping\pointShadows.hpp">
+      <Filter>04_03_shadowMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_04_normalMapping\normalMapping.hpp">
+      <Filter>04_04_normalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_05_parallaxMapping\parallaxMapping.hpp">
+      <Filter>04_05_parallaxMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_05_parallaxMapping\stepParallaxMapping.hpp">
+      <Filter>04_05_parallaxMapping</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Ext\Inculedes\glad.c">
@@ -112,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="..\00_01_hello_window\hellowindow.cpp">
       <Filter>00_01_hello_window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\04_05_parallaxMapping\parallaxOcclusionMapping.hpp">
+      <Filter>04_05_parallaxMapping</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

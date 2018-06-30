@@ -34,6 +34,29 @@
     <ClInclude Include="..\01_05_lightCasters\lightCasters.hpp" />
     <ClInclude Include="..\01_06_multipleLights\multipleLights.hpp" />
     <ClInclude Include="..\02_01_assimp\assimp.hpp" />
+    <ClInclude Include="..\03_01_depthTesting\depthTesting.hpp" />
+    <ClInclude Include="..\03_02_stencilTesting\stencilTesting.hpp" />
+    <ClInclude Include="..\03_03_blending\blending.hpp" />
+    <ClInclude Include="..\03_04_faceCulling\faceCulling.hpp" />
+    <ClInclude Include="..\03_05_framebuffers\framebuffers.hpp" />
+    <ClInclude Include="..\03_06_cubemaps\cubemaps.hpp" />
+    <ClInclude Include="..\03_06_cubemaps\environmentMapping.hpp" />
+    <ClInclude Include="..\03_07_advancedData\advancedData.hpp" />
+    <ClInclude Include="..\03_09_geometryShader\explode.hpp" />
+    <ClInclude Include="..\03_09_geometryShader\geometryShader.hpp" />
+    <ClInclude Include="..\03_09_geometryShader\normalVisual.hpp" />
+    <ClInclude Include="..\03_10_instanceing\instancingPlus.hpp" />
+    <ClInclude Include="..\03_10_instanceing\instancing.hpp" />
+    <ClInclude Include="..\03_10_instanceing\planet.hpp" />
+    <ClInclude Include="..\03_11_antiAliasing\antiAliasing.hpp" />
+    <ClInclude Include="..\04_01_advancedLighting\advancedLighting.hpp" />
+    <ClInclude Include="..\04_02_gammaCorrection\gammaCorrection.hpp" />
+    <ClInclude Include="..\04_03_shadowMapping\pointShadows.hpp" />
+    <ClInclude Include="..\04_03_shadowMapping\shadow.hpp" />
+    <ClInclude Include="..\04_03_shadowMapping\shadowMapping.hpp" />
+    <ClInclude Include="..\04_04_normalMapping\normalMapping.hpp" />
+    <ClInclude Include="..\04_05_parallaxMapping\parallaxMapping.hpp" />
+    <ClInclude Include="..\04_05_parallaxMapping\stepParallaxMapping.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Ext\Inculedes\glad.c" />
@@ -43,6 +66,7 @@
     <ClCompile Include="..\00_common\camera.cpp" />
     <ClCompile Include="..\00_common\main.cpp" />
     <ClCompile Include="..\00_common\gmath.cpp" />
+    <ClCompile Include="..\04_05_parallaxMapping\parallaxOcclusionMapping.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7B905430-DA0D-4460-981C-13BE2B8EB542}</ProjectGuid>

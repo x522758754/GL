@@ -34,6 +34,17 @@ glm::vec3 camera::get_front()
 
 glm::mat4 camera::GetViewMatrix()
 {
+	//相机空间矩阵 (right、 up、 front、 w)
+	///				1	0	0	world_camera_x		
+	///lookAt =	[	0	1	0	world_camera_y ]
+	///				0	0	-1  world_camera_z
+	///				0	0	0	1
+
+	//相机空间矩阵 (right、 up、 front、 w)
+	///				rx	ux	fx	-dot(r, eye)		
+	///lookAt =	[	ry	uy	fy	-dot(u, eye) ]
+	///				rz	uz	fz  dot(f, eye)
+	///				0	0	0	1
 	return glm::lookAt(_position, _position + _front, _up);
 }
 

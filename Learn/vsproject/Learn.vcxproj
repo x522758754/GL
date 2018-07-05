@@ -57,6 +57,10 @@
     <ClInclude Include="..\04_04_normalMapping\normalMapping.hpp" />
     <ClInclude Include="..\04_05_parallaxMapping\parallaxMapping.hpp" />
     <ClInclude Include="..\04_05_parallaxMapping\stepParallaxMapping.hpp" />
+    <ClInclude Include="..\04_06_hdr\hdr.hpp" />
+    <ClInclude Include="..\04_07_bloom\bloom.hpp" />
+    <ClInclude Include="..\04_08_deferredShading\deferredShading.hpp" />
+    <ClInclude Include="..\04_09_ssao\ssao.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Ext\Inculedes\glad.c" />

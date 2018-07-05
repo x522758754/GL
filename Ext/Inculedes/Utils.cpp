@@ -349,6 +349,7 @@ int genfboColor(GLuint index, GLuint* texColorBuffer)
 	//为帧缓存创建纹理
 	glGenTextures(1, texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, *texColorBuffer);
+	///默认的帧缓冲默认一个颜色分量只占用8位(bits)用GL_UNSIGNED_BYTE
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -465,6 +466,72 @@ int genfboMS(int samples, GLuint* textureMS)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return msFBO;
+}
+
+int genfboFloatingPoint(GLuint &tex, int mapW, int mapH)
+{
+	GLuint FBO;
+	glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	///type 指定像素数据的数据类型 为GL_FLOAT， GL_UNSIGNED_BYTE不够用了
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, mapW, mapH, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	//将纹理附加到帧缓存，附件类型为颜色
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+	return FBO;
+}
+
+int genfboFloatingPointMultiColor(GLuint* texs, int mapW, int mapH, int texCount)
+{
+	GLuint FBO;
+	glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	glGenTextures(texCount, texs);
+
+	for (int i =0; i < texCount; ++i)
+	{
+		glBindTexture(GL_TEXTURE_2D, texs[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, mapW, mapH, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		//将纹理附加到帧缓存，附件类型为颜色
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texs[i], 0);
+	}
+
+	GLuint RBO;
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	//经常用于深度和模板附件
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, mapW, mapH);
+
+	//附加渲染缓冲对象到帧缓冲
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	//我们需要显式告知OpenGL我们正在通过glDrawBuffers渲染到多个颜色缓冲，否则OpenGL只会渲染到帧缓冲的第一个颜色附件，而忽略所有其他的。我们可以通过传递多个颜色附件的枚举来做这件事，
+	///注：当渲染到这个帧缓冲中的时候,fs着色器只有一个输出值时，则每个纹理绘制的结果都是一样的。
+	///当渲染到这个帧缓冲中的时候，fs着色器使用多个布局location修饰符，那么fragment就会用相应的颜色缓冲就会被用来渲染。例：
+	///layout (location = 0) out vec4 FragColor;
+	///layout(location = 1) out vec4 BrightColor;
+	///FragColor 就会绘制在GL_COLOR_ATTACHMENT0 对应的纹理texs[0]中， BrightColor则对应BrightColor
+	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, attachments);
+	// 最后检测framebuffer 是否完成
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
+
+	return FBO;
 }
 
 int genrbo()

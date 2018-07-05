@@ -43,6 +43,13 @@ int genfboDepthStencil();
 /// 创建一个多采样帧缓冲
 int genfboMS(int samples, GLuint* textureMS);
 
+/// 创建一个浮点帧缓冲
+int genfboFloatingPoint(GLuint &tex, int mapW, int mapH);
+
+/// 创建一个浮点帧缓冲多个color buffers
+
+int genfboFloatingPointMultiColor(GLuint* tex, int mapW, int mapH, int texCount);
+
 /// 创建一个深度模板渲染对象附件
 int genrbo();
 

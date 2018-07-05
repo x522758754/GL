@@ -30,7 +30,6 @@ class pointShadows : public app
 	{
 		lightPos = glm::vec3(0.f); //Õë¶Ôrenderscene()
 
-		lightPos = glm::vec3(2.f, 3.f, 2.f); //Õë¶Ôrenderscene1()
 		cam->set_position(lightPos);
 
 		shader = Shader("_shaders/_0403_pointShadows_depth.vs", "_shaders/_0403_pointShadows_depth.fs", "_shaders/_0403_pointShadows_depth.gs");
@@ -86,7 +85,7 @@ class pointShadows : public app
 		for (unsigned int i = 0; i < 6; ++i)
 			shader.setMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
 
-		renderScene1(shader);
+		renderScene(shader);
 
 		// 2.äÖÈ¾Éî¶ÈÌùÍ¼µ½ÆÁÄ»
 		glViewport(0, 0, cfg.scrWidth, cfg.scrHeight);
@@ -114,30 +113,9 @@ class pointShadows : public app
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, texture_specular1);
 
-		renderScene1(shadowShader);
+		renderScene(shadowShader);
 	}
 
-	void renderScene1(const Shader &shader)
-	{
-		glm::vec3 cubePositions[] =
-		{
-			glm::vec3(0.0f, 3.5f, 0.0),
-			glm::vec3(-1.0f, 1.0f, -1.0),
-			glm::vec3(1.0f, -.5f, -2.0),
-		};
-
-		glm::mat4 model;
-		drawPlane(&planeVAO);
-
-		for (int i = 0; i != cubePositions->length(); ++i)
-		{
-			model = glm::mat4();
-			model = glm::translate(model, cubePositions[i]);
-			model = glm::scale(model, glm::vec3(0.5f));
-			shader.setMat4("model", model);
-			drawCube(&cubeVAO);
-		}
-	}
 
 	void renderScene(const Shader &shader)
 	{

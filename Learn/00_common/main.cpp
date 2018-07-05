@@ -31,5 +31,8 @@
 #include "..\04_05_parallaxMapping\parallaxMapping.hpp"
 #include "..\04_05_parallaxMapping\stepParallaxMapping.hpp"
 #include "..\04_05_parallaxMapping\parallaxOcclusionMapping.hpp"
+#include "..\04_06_hdr\hdr.hpp"
+#include "..\04_07_bloom\bloom.hpp"
+#include "..\04_08_deferredShading\deferredShading.hpp"
 
-DECLARE_APP(parallaxOcclusionMapping)
+DECLARE_APP(pointShadows)

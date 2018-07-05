@@ -89,6 +89,18 @@
     <Filter Include="04_05_parallaxMapping">
       <UniqueIdentifier>{574b90fc-d4ab-48c0-8468-8d8b5033f0c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04_06_hdr">
+      <UniqueIdentifier>{0aefc267-c0f6-4a27-9f64-a246afcd63f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_07_bloom">
+      <UniqueIdentifier>{9f789c48-f5e8-4cd8-aade-99f66bcf713c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_08_deferredShading">
+      <UniqueIdentifier>{00d5a38c-01df-4aa9-88fb-be81f7e89f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_09_ssao">
+      <UniqueIdentifier>{b96cde94-3d77-4eca-9b61-bc0055e40a76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\00_common\app.h">
@@ -204,6 +216,18 @@
     </ClInclude>
     <ClInclude Include="..\04_05_parallaxMapping\stepParallaxMapping.hpp">
       <Filter>04_05_parallaxMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_06_hdr\hdr.hpp">
+      <Filter>04_06_hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_07_bloom\bloom.hpp">
+      <Filter>04_07_bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_08_deferredShading\deferredShading.hpp">
+      <Filter>04_08_deferredShading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\04_09_ssao\ssao.hpp">
+      <Filter>04_09_ssao</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

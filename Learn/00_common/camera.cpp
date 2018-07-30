@@ -125,22 +125,27 @@ void camera::updateCameraAttr()
 
 	///Mpitch(绕x轴旋转pitch得到的旋转矩阵)
 	/*	x		y		z
-	1		0		0
-	0		cos		-sin
-	0		sin		cos
+		1		0		0
+		0		cos		-sin
+		0		sin		cos
 	*/
 	///Myaw(绕y轴旋转yaw得到的旋转矩阵)
 	/*	x		y		z
-	cos		0		sin
-	0		1		0
-	-sin	0		cos
+		cos		0		sin
+		0		1		0
+		-sin	0		cos
 	*/
 	///M = Myaw * Mpitch
 	/*	x					y					z
 		cosyaw				sinpitch*sinyaw		sinyaw*cospitch		
 		0					cospitch			-sinpitch
-		sinyw				sinpitch*cosyaw		cospitch*cosyaw
+		sinyw				sinpitch*cosyaw		cosyaw*cospitch
 	*/
+
+	///先计算Mrotate
+	///Mrotate = Myaw * Mpitch
+	///新forward为 Mrotate * 老forward
+
 
 	///world space下：定义相机初始属性
 	glm::vec3 originalForward = glm::vec3(0, 0, -1);	//相机初始朝向
@@ -153,9 +158,9 @@ void camera::updateCameraAttr()
 
 	///由相机当前的pitch和yaw计算forward
 	/// forward = M * forward
-	_front.x = sin(glm::radians(_pitch)) * cos(glm::radians(_yaw)) * originalForward.z;
-	_front.y = -sin(glm::radians(_yaw)) * originalForward.z;
-	_front.z = cos(glm::radians(_pitch)) * cos(glm::radians(_yaw)) * originalForward.z;
+	_front.x = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)) * originalForward.z;
+	_front.y = -sin(glm::radians(_pitch)) * originalForward.z;
+	_front.z = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)) * originalForward.z;
 	_front = glm::normalize(_front);//相机当前朝向
 
 	_right = glm::normalize(glm::cross(_front, originalUp));//相机右侧（右轴）

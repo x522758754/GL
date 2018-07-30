@@ -71,7 +71,8 @@ private:
 	//相机控制
 	float _zoomSpeed;	///相机推拉速度
 	float _rotateSpeed;	///相机转向速度(pitchSpeed、yawSpeed都用此速度)
-	float _fovy;		///默认相机视野角度
+	float _fovy;		///相机y方向视野角度,视锥体的垂直方向上的角度
+						///相机x方向视野角度,水平FOV取决于视口的宽高比
 
 	//相机属性
 	glm::vec3 _position;	///相机位置(world space)

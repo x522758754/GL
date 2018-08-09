@@ -40,8 +40,13 @@ glm::mat4 camera::GetViewMatrix()
 	
 	///首先将相机位置位移世界坐标系原点，得到平移矩阵view_t
 	///之后其他世界坐标系的位置使用此矩阵，则是平移到相对相机位置为参考系（相机位置为坐标系原点）的空间
+	///注：草稿本上的矩阵view_t应该长这样,矩阵view_r_t同理
+	///x  y  z  w 
+	///1, 0, 0, -_position.x
+	///0, 1, 0, -_position.y
+	///0, 0, 1, -_position.z
+	///0, 0, 0, 1
 	glm::mat4 view_t = glm::mat4(
-		///		  x				y				z			w		
 		glm::vec4(1,			0,				0,			0),
 		glm::vec4(0,			1,				0,			0),
 		glm::vec4(0,			0,				1,			0),
@@ -52,17 +57,15 @@ glm::mat4 camera::GetViewMatrix()
 	///注：旋转坐标系（旋转矩阵）都是以原点中心进行旋转
 	///注：如果世界坐标未转换到view_t所在的空间，直接使用此矩阵结果是，该坐标是以世界坐标系为原点进行旋转。
 	///注：此处以front为z轴则是左手坐标系，以 - front则为右手坐标系, 用opengl统一用右手坐标系（包含着色器中的矩阵计算，所以此处用 -_front
-	glm::mat4 view_r = glm::mat4(
-		///		  x			y		z			w		
-		glm::vec4(_right.x, _up.x, -_front.x,	0),
-		glm::vec4(_right.y, _up.y, -_front.y,	0),
-		glm::vec4(_right.z, _up.z, -_front.z,	0),
-		glm::vec4(0,		0,		0,			1)
+	glm::mat4 view_r = glm::mat4(	
+		glm::vec4(_right.x, _up.x, -_front.x,	0), ///x
+		glm::vec4(_right.y, _up.y, -_front.y,	0), ///y
+		glm::vec4(_right.z, _up.z, -_front.z,	0), ///z
+		glm::vec4(0,		0,		0,			1)  ///w
 	);
 
 	///直接构建的view坐标系
-	glm::mat4 view_r_t = glm::mat4(
-		///		  x								y							z							w		
+	glm::mat4 view_r_t = glm::mat4(	
 		glm::vec4(_right.x,						_up.x,						-_front.x,					0),
 		glm::vec4(_right.y,						_up.y,						-_front.y,					0),
 		glm::vec4(_right.z,						_up.z,						-_front.z,					0),
@@ -73,7 +76,7 @@ glm::mat4 camera::GetViewMatrix()
 
 	glm::mat4 view_s = glm::lookAt(_position, _position + _front, _up);
 	
-	return view;
+	return view_r_t;
 }
 
 void camera::handleEular(Camera_Eular direction)

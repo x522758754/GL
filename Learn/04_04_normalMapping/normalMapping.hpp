@@ -119,6 +119,15 @@ class normalMapping : public app
 		model = glm::mat4();
 		shader.setMat4("model", model);
 
+		glm::vec4 vec(-0.5f, -0.5f, -0.5f, 1.0);
+		vec = model * vec;
+
+		glm::vec4 testvec(glm::dot(view[0], vec), glm::dot(view[1], vec), glm::dot(view[2], vec), glm::dot(view[3], vec));
+
+		glm::vec4 testvec1 = vec * view;
+
+		vec = view * vec;
+
 		m.Draw(shader);
 
 

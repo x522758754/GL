@@ -8,6 +8,18 @@
 // normalized device coordinates,NDC,顶点坐标在vertex shader处理之后，它们就应该是ndc了,坐标xyz 在(-1.0,1.0)
 //通过glViewport函数进行Viewport Transform, ndc => screen-space coordinates
 
+/// 顶点数组对象：Vertex Array Object，
+/// 顶点缓冲对象：Vertex Buffer Object
+/// 索引缓冲对象：Element Buffer Object，EBO或Index Buffer Object，IBO
+
+///理解：VAO 指定当前绘制的哪个模型；VAO 可以像顶点缓冲对象那样被绑定，任何随后的顶点属性调用都会储存在这个VAO中。
+///		 对于不同的模型（不同的顶点属性）或者不同的属性配置(不一样的VBO)，只需要绑定不同的VAO。
+///		 VBO依附于VAO，管理、配置这个模型的顶点数据； 在GPU上创建内存存储顶点数据，使用缓冲对象的好处：是我们可以一次性的发送一大批数据到显卡上，而不是每个顶点发送一次。
+///																										从CPU把数据发送到显卡相对较慢，所以只要可能我们都要尝试尽量一次性发送尽可能多的数据。
+///																										当数据发送至显卡的内存中后，顶点着色器几乎能立即访问顶点，这是个非常快的过程。
+
+///glDrawArrays：绘制函数，它使用当前激活的着色器，之前的定义顶点属性配置和VBO的顶点数据（通过VAO间绑定）来绘制图元。
+
 class helloTriangle : public app
 {
 	///顶点数组对象，类似VBO，OpenGL的核心模式要求我们使用VAO,

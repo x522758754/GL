@@ -35,4 +35,4 @@
 #include "..\04_07_bloom\bloom.hpp"
 #include "..\04_08_deferredShading\deferredShading.hpp"
 
-DECLARE_APP(pointShadows)
+DECLARE_APP(normalMapping)

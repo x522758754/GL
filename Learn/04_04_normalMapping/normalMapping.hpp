@@ -52,6 +52,11 @@
 ///															rw	uw	fw	1			0	0	0	w
 ///Matrix_translate：先将相机在世界空间坐标系下的位置移到原点（注：目的是以相机为原点进行接下来的旋转，参考real-time书籍）
 ///Matrix_rotation: 以相机在世界坐标系下right、 up、 front构建的矩阵；可以将向量由世界空间变换到相机空间
+///参考glm::lookAt函数
+/// normalize(right) -> s
+/// normalize(up) -> u
+/// normalize(front) -> -f
+/// w = (-dot(s, wc) , -dot(u, wc), -dot(f, wc)
 
 class normalMapping : public app
 {

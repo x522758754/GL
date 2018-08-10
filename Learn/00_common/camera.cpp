@@ -34,49 +34,56 @@ glm::vec3 camera::get_front()
 
 glm::mat4 camera::GetViewMatrix()
 {
-
-	///取世界坐标系的三个三个单位正交向量和相机在世界坐标系的位置，构造view矩阵（将坐标从世界空间 =》 相机空间）
-	///view矩阵代表，以相机为参考的坐标系
-	
-	///首先将相机位置位移世界坐标系原点，得到平移矩阵view_t
-	///之后其他世界坐标系的位置使用此矩阵，则是平移到相对相机位置为参考系（相机位置为坐标系原点）的空间
-	///注：草稿本上的矩阵view_t应该长这样,矩阵view_r_t同理
-	///x  y  z  w 
-	///1, 0, 0, -_position.x
-	///0, 1, 0, -_position.y
-	///0, 0, 1, -_position.z
-	///0, 0, 0, 1
-	glm::mat4 view_t = glm::mat4(
-		glm::vec4(1,			0,				0,			0),
-		glm::vec4(0,			1,				0,			0),
-		glm::vec4(0,			0,				1,			0),
-		glm::vec4(-_position.x, -_position.y, -_position.z, 1)
+	///取世界坐标系的三个三个单位正交向量和相机在世界坐标系的位置，构造view_tanslate_inverse矩阵（将坐标从相机空间=》世界空间）
+	/// view_tanslate_inverse (cameraPos => worldPos)
+	///			x  y  z  w
+	///x分量	1, 0, 0, _position.x
+	///y分量	0, 1, 0, _position.y
+	///z分量	0, 0, 1, _position.z
+	///点或向量	0, 0, 0, 1
+	///注：	w代表新坐标系的原点，用世界坐标系的相机位置,
+	///		xyz则新坐标系的标准正交基(相互垂直、长度为1),用世界坐标系的三组向量
+	glm::mat4 view_tanslate_inverse = glm::mat4(
+		glm::vec4(1,			0,				0,			0), ///x
+		glm::vec4(0,			1,				0,			0), ///y
+		glm::vec4(0,			0,				1,			0), ///z
+		glm::vec4(_position.x, _position.y, _position.z,	1)	///w
 	);
 
-	///以相机为参考（即相机位置坐标系原点），旋转构造旋转矩阵
-	///注：旋转坐标系（旋转矩阵）都是以原点中心进行旋转
-	///注：如果世界坐标未转换到view_t所在的空间，直接使用此矩阵结果是，该坐标是以世界坐标系为原点进行旋转。
+	///同理,构造view_tanslate_inverse矩阵(将worldPos => cameraPos)
 	///注：此处以front为z轴则是左手坐标系，以 - front则为右手坐标系, 用opengl统一用右手坐标系（包含着色器中的矩阵计算，所以此处用 -_front
-	glm::mat4 view_r = glm::mat4(	
-		glm::vec4(_right.x, _up.x, -_front.x,	0), ///x
-		glm::vec4(_right.y, _up.y, -_front.y,	0), ///y
-		glm::vec4(_right.z, _up.z, -_front.z,	0), ///z
-		glm::vec4(0,		0,		0,			1)  ///w
+	glm::mat4 view_rotation_inverse = glm::mat4(	
+		glm::vec4(_right.x,		_right.y,	_right.z,	0), ///x
+		glm::vec4(_up.x,		_up.y,		_up.z,		0), ///y
+		glm::vec4(-_front.x,	-_front.y,	-_front.z,	0), ///z
+		glm::vec4(0,			0,			0,			1)  ///w
 	);
 
-	///直接构建的view坐标系
-	glm::mat4 view_r_t = glm::mat4(	
+	///直接构建的view_tanslate_inverse坐标系(将worldPos => cameraPos)
+	glm::mat4 view_r_t_inverse = glm::mat4(	
+		glm::vec4(_right.x,		_right.y,		_right.z,		0),
+		glm::vec4(_up.x,		_up.y,			_up.z,			0),
+		glm::vec4(-_front.x,	-_front.y,		-_front.z,		0),
+		glm::vec4(_position.x,	_position.y,	_position.z,	1)
+	);
+
+	///直接构建的view坐标系 (将worldPos => cameraPos)
+	glm::mat4 view = glm::mat4(
 		glm::vec4(_right.x,						_up.x,						-_front.x,					0),
 		glm::vec4(_right.y,						_up.y,						-_front.y,					0),
 		glm::vec4(_right.z,						_up.z,						-_front.z,					0),
 		glm::vec4(-glm::dot(_position, _right), -glm::dot(_position, _up), glm::dot(_position, _front), 1)
 	);
 
-	glm::mat4 view = view_r * view_t;
+	glm::mat4 view1 = glm::inverse(view_tanslate_inverse * view_rotation_inverse);
+	glm::mat4 view2 = glm::inverse(view_r_t_inverse);
 
-	glm::mat4 view_s = glm::lookAt(_position, _position + _front, _up);
+	//s:side -> right
+	//u:up -> up
+	//f:forward -> front
+	glm::mat4 view_3 = glm::lookAt(_position, _position + _front, _up);
 	
-	return view_r_t;
+	return view;
 }
 
 void camera::handleEular(Camera_Eular direction)

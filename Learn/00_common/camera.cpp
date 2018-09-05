@@ -43,6 +43,17 @@ glm::mat4 camera::GetViewMatrix()
 	///点或向量	0, 0, 0, 1
 	///注：	w代表新坐标系的原点，用世界坐标系的相机位置,
 	///		xyz则新坐标系的标准正交基(相互垂直、长度为1),用世界坐标系的三组向量
+
+	/// test
+	float scale = 2.0f;
+	float rate =  1 / scale;
+	glm::mat4 view_scale_inverse = glm::mat4(
+		glm::vec4(scale,	0,				0,			0), ///x
+		glm::vec4(0,		scale,			0,			0), ///y
+		glm::vec4(0,		0,				scale,		0), ///z
+		glm::vec4(0,		0,				0,			1)  ///w
+	);
+
 	glm::mat4 view_tanslate_inverse = glm::mat4(
 		glm::vec4(1,			0,				0,			0), ///x
 		glm::vec4(0,			1,				0,			0), ///y
@@ -67,15 +78,17 @@ glm::mat4 camera::GetViewMatrix()
 		glm::vec4(_position.x,	_position.y,	_position.z,	1)
 	);
 
+	
+
 	///直接构建的view坐标系 (将worldPos => cameraPos)
 	glm::mat4 view = glm::mat4(
-		glm::vec4(_right.x,						_up.x,						-_front.x,					0),
-		glm::vec4(_right.y,						_up.y,						-_front.y,					0),
-		glm::vec4(_right.z,						_up.z,						-_front.z,					0),
+		glm::vec4(_right.x * rate,						_up.x * rate,						-_front.x * rate,					0),
+		glm::vec4(_right.y * rate,						_up.y * rate,						-_front.y * rate,					0),
+		glm::vec4(_right.z * rate,						_up.z * rate,						-_front.z * rate,					0),
 		glm::vec4(-glm::dot(_position, _right), -glm::dot(_position, _up), glm::dot(_position, _front), 1)
 	);
 
-	glm::mat4 view1 = glm::inverse(view_tanslate_inverse * view_rotation_inverse);
+	glm::mat4 view1 = glm::inverse(view_scale_inverse * view_tanslate_inverse * view_rotation_inverse); // (MN)-1 = N-1 M-1
 	glm::mat4 view2 = glm::inverse(view_r_t_inverse);
 
 	//s:side -> right
@@ -83,7 +96,7 @@ glm::mat4 camera::GetViewMatrix()
 	//f:forward -> front
 	glm::mat4 view_3 = glm::lookAt(_position, _position + _front, _up);
 	
-	return view;
+	return view1;
 }
 
 void camera::handleEular(Camera_Eular direction)
